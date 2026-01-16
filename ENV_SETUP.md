@@ -1,166 +1,209 @@
-# Environment Variables Setup for Vercel + Supabase
+# Environment Variables Setup for Vercel Deployment
 
-## Required Environment Variables for Vercel
+## 🔑 Required Environment Variables
 
-Add these in your Vercel dashboard (Project Settings → Environment Variables):
+You **MUST** set these in your Vercel project settings:
 
-### 1. Database Connection (Supabase PostgreSQL)
+### 1. **NEXTAUTH_URL** (Required)
 ```
-DATABASE_URL=postgres://postgres.pipfgovvnmhtzvemdvze:V0JkXxEPK27PIUTD@aws-1-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require
+Format: https://your-app-name.vercel.app
+Example: https://yearzero.vercel.app
 ```
+- This is your Vercel deployment URL
+- Update this after first deployment with your actual domain
+- Find it in: Vercel Dashboard → Your Project → Settings → Domains
 
-**Important Notes:**
-- Use the **NON-POOLING** connection string for Prisma (port 5432)
-- This is what you have as `POSTGRES_URL_NON_POOLING` in your Supabase dashboard
-- Use the **pooled connection** (port 6543) for runtime if you prefer, but Prisma migrations need non-pooling
-
-### 2. NextAuth Configuration
+### 2. **NEXTAUTH_SECRET** (Required)
 ```
-NEXTAUTH_URL=https://your-app-name.vercel.app
-NEXTAUTH_SECRET=YmsWrqDd0SRO6SoUEIm3nnOgiovJgXh/0E4qNMhTeMQ=
+Generate with: openssl rand -base64 32
 ```
+- Used to encrypt JWT tokens
+- **Generate a new one** for production (never use your local dev secret!)
+- Keep this secret - don't commit it to Git
 
-**Important Notes:**
-- `NEXTAUTH_URL` should be your actual Vercel deployment URL
-- Generate a new secret with: `openssl rand -base64 32`
-- The secret above is just an example - use a unique one
-
-### 3. Optional: Email Configuration (for daily notifications)
+### 3. **DATABASE_URL** (Required)
 ```
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
+For PostgreSQL (Production):
+Format: postgresql://user:password@host:port/database?sslmode=require
+Example: postgresql://user:pass@db.xxx.us-east-1.rds.amazonaws.com:5432/yearzero?sslmode=require
 ```
 
-### 4. Optional: Cron Security
-```
-CRON_SECRET=your-cron-secret-here
-```
+**How to get this:**
+- **Option A: Vercel Postgres** (Easiest)
+  1. Vercel Dashboard → Your Project → Storage → Create Database → Postgres
+  2. Copy the connection string from the database page
+  3. It will auto-populate as `POSTGRES_URL` - copy that value
 
----
+- **Option B: External Provider** (Supabase, Neon, etc.)
+  1. Create a PostgreSQL database
+  2. Copy the connection string
+  3. Use it as `DATABASE_URL`
 
-## Quick Setup Steps
-
-### Step 1: Update Prisma Schema (Already Done ✅)
-The schema has been updated to use PostgreSQL:
+**⚠️ Important:** After setting `DATABASE_URL`, update `prisma/schema.prisma`:
 ```prisma
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql"  // Change from "sqlite"
   url      = env("DATABASE_URL")
 }
 ```
 
-### Step 2: Add Environment Variables in Vercel
-
-1. Go to your Vercel project dashboard
-2. Click **Settings** → **Environment Variables**
-3. Add each variable for **Production**, **Preview**, and **Development** environments:
-
-   - `DATABASE_URL` = Your Supabase non-pooling connection string
-   - `NEXTAUTH_URL` = Your Vercel app URL (e.g., `https://yearzero.vercel.app`)
-   - `NEXTAUTH_SECRET` = Generate with `openssl rand -base64 32`
-
-### Step 3: Deploy and Run Migrations
-
-After deploying to Vercel, you need to run database migrations:
-
-**Option A: Using Vercel CLI (Recommended)**
+Then commit and push:
 ```bash
-# Install Vercel CLI if you haven't
-npm i -g vercel
+git add prisma/schema.prisma
+git commit -m "Update Prisma schema for PostgreSQL"
+git push
+```
 
-# Pull environment variables
+---
+
+## 📧 Optional: Email Configuration
+
+Only set these if you want daily email notifications:
+
+### 4. **EMAIL_HOST** (Optional)
+```
+Default: smtp.gmail.com
+Example: smtp.gmail.com
+```
+
+### 5. **EMAIL_PORT** (Optional)
+```
+Default: 587
+Example: 587
+```
+
+### 6. **EMAIL_USER** (Optional)
+```
+Example: your-email@gmail.com
+```
+- Your email address for sending notifications
+
+### 7. **EMAIL_PASSWORD** (Optional)
+```
+Example: your-app-password
+```
+- **NOT your regular password!**
+- For Gmail: Generate an App Password at https://myaccount.google.com/apppasswords
+- Enable 2FA on your Google account first
+
+### 8. **CRON_SECRET** (Optional - Recommended for Production)
+```
+Generate with: openssl rand -base64 32
+```
+- Protects your cron endpoint from unauthorized access
+- If set, uncomment the auth check in `src/app/api/cron/daily-notifications/route.ts`
+
+---
+
+## 🚀 Quick Setup Steps
+
+### Step 1: Set Required Variables in Vercel
+
+1. Go to **Vercel Dashboard** → Your Project → **Settings** → **Environment Variables**
+
+2. Add these 3 variables:
+   - `NEXTAUTH_URL` = `https://your-app-name.vercel.app` (update after first deploy)
+   - `NEXTAUTH_SECRET` = `[generate with: openssl rand -base64 32]`
+   - `DATABASE_URL` = `[from Vercel Postgres or external provider]`
+
+3. Click **Save** for each variable
+
+### Step 2: Create PostgreSQL Database
+
+**Using Vercel Postgres (Recommended):**
+1. Vercel Dashboard → Your Project → **Storage** → **Create Database**
+2. Choose **Postgres**
+3. Select a region (closest to your users)
+4. Copy the connection string (shown as `POSTGRES_URL`)
+
+### Step 3: Update Prisma Schema
+
+Update `prisma/schema.prisma`:
+```prisma
+datasource db {
+  provider = "postgresql"  // Change from "sqlite"
+  url      = env("DATABASE_URL")
+}
+```
+
+Commit and push:
+```bash
+git add prisma/schema.prisma
+git commit -m "Update for PostgreSQL production"
+git push origin main
+```
+
+### Step 4: Run Migrations
+
+After deployment, run migrations:
+```bash
+# Via Vercel CLI (if installed)
 vercel env pull .env.local
-
-# Run migrations
 npx prisma migrate deploy
+
+# Or via Vercel dashboard (use a deployment hook or API)
 ```
 
-**Option B: Run migrations manually after deployment**
-```bash
-# Connect to your database directly
-DATABASE_URL="your-connection-string" npx prisma migrate deploy
-```
+### Step 5: Redeploy
 
-**Option C: Use Supabase SQL Editor**
-- Copy the SQL from `prisma/migrations/20260115225358_init/migration.sql`
-- Paste and run in Supabase SQL Editor
-
-### Step 4: Generate Prisma Client
-
-The build process should automatically run `prisma generate`, but if needed:
-```bash
-npx prisma generate
-```
+1. Go to Vercel Dashboard → Your Project → **Deployments**
+2. Click **"Redeploy"** on the latest deployment
+3. Or push another commit to trigger auto-deploy
 
 ---
 
-## Supabase Connection String Format
+## ✅ Verification Checklist
 
-From your Supabase dashboard, you should use:
+After deployment, verify:
 
-**For Prisma (Migrations & Schema Pushes):**
-```
-postgres://postgres.pipfgovvnmhtzvemdvze:YOUR_PASSWORD@aws-1-us-east-1.pooler.supabase.com:5432/postgres?sslmode=require
-```
-
-**For Runtime (Optional - can use pooled):**
-```
-postgres://postgres.pipfgovvnmhtzvemdvze:YOUR_PASSWORD@aws-1-us-east-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true
-```
+- [ ] App loads at your Vercel URL
+- [ ] Can create an account (signup works)
+- [ ] Can login
+- [ ] Dashboard loads
+- [ ] Can create resolutions
+- [ ] Database is connected (no errors in logs)
 
 ---
 
-## Verify Your Setup
+## 🔍 Finding Your Vercel URL
 
-After deployment, check:
-1. ✅ Build succeeds on Vercel
-2. ✅ App loads without database errors
-3. ✅ Can sign up and login
-4. ✅ Can create resolutions
-5. ✅ Database tables exist in Supabase
+1. Go to Vercel Dashboard → Your Project
+2. Look at the **Domains** section
+3. Your default URL is: `https://your-project-name.vercel.app`
+4. Update `NEXTAUTH_URL` to match this exactly (with `https://`)
 
 ---
 
-## Local Development Setup
+## 🆘 Troubleshooting
 
-For local development, you can:
+### "Invalid NEXTAUTH_URL"
+- Make sure it starts with `https://`
+- Match it exactly to your Vercel domain (check Domains section)
 
-**Option 1: Use Supabase for local too**
-```env
-DATABASE_URL="your-supabase-connection-string"
-```
+### "Database connection failed"
+- Verify `DATABASE_URL` is correct
+- Check if database allows connections from Vercel IPs
+- For external providers, enable connection pooling if available
 
-**Option 2: Use local SQLite (switch schema provider back)**
-```env
-DATABASE_URL="file:./prisma/dev.db"
-```
-
-Then update `prisma/schema.prisma`:
-```prisma
-datasource db {
-  provider = "sqlite"  // Change back for local
-  url      = env("DATABASE_URL")
-}
-```
+### "Missing NEXTAUTH_SECRET"
+- Generate one: `openssl rand -base64 32`
+- Add it in Vercel Environment Variables
+- Redeploy
 
 ---
 
-## Troubleshooting
+## 📝 Summary
 
-### "Failed to connect to database"
-- Check `DATABASE_URL` is correct
-- Ensure you're using port **5432** (non-pooling) for migrations
-- Verify password is correct
-- Check Supabase database is running
+**Minimum Required (3 variables):**
+1. `NEXTAUTH_URL` - Your Vercel app URL
+2. `NEXTAUTH_SECRET` - Random secret (generate with openssl)
+3. `DATABASE_URL` - PostgreSQL connection string
 
-### "Schema is out of sync"
-- Run `npx prisma db push` or `npx prisma migrate deploy`
-- Check migration files are correct
+**Optional (4 variables for email):**
+4. `EMAIL_HOST` - SMTP server
+5. `EMAIL_PORT` - SMTP port
+6. `EMAIL_USER` - Your email
+7. `EMAIL_PASSWORD` - App password (not regular password)
 
-### "NextAuth errors"
-- Verify `NEXTAUTH_URL` matches your actual domain exactly
-- Check `NEXTAUTH_SECRET` is set
-- Clear cookies and try again
+That's it! Your app should deploy successfully.
 

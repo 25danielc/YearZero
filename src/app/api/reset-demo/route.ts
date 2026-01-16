@@ -4,9 +4,6 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { seedDemoData } from "@/lib/seed"
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
-
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authOptions)
 
