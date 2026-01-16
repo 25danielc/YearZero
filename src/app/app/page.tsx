@@ -12,6 +12,9 @@ import { Plus, CheckCircle } from "lucide-react"
 import { getDateString } from "@/lib/utils"
 import { Category, FrequencyType } from "@/lib/enums"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
 
