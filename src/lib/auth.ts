@@ -5,6 +5,15 @@ import { prisma } from "@/lib/prisma"
 import bcrypt from "bcryptjs"
 import { PrismaClient } from "@prisma/client"
 
+// Validate required environment variables
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error("NEXTAUTH_SECRET is not set. Please set it in your environment variables.")
+}
+
+if (!process.env.NEXTAUTH_URL && process.env.NODE_ENV === 'production') {
+  console.warn("NEXTAUTH_URL is not set in production. This may cause authentication issues.")
+}
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma as unknown as PrismaClient) as any,
