@@ -105,7 +105,7 @@ export async function seedDemoData(userId: string) {
     where: { userId },
   })
 
-  const totalXp = checkIns.reduce((sum, c) => sum + c.xpAwarded, 0)
+  const totalXp = checkIns.reduce((sum: number, c: { xpAwarded: number }) => sum + c.xpAwarded, 0)
   const level = Math.floor(totalXp / 100) + 1
 
   await prisma.levelProgress.update({
