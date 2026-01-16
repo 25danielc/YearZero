@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { StreakBadge } from "@/components/streak-badge"
 import { CheckInHistory } from "@/components/checkin-history"
+import { Category, FrequencyType } from "@/lib/enums"
 
 export default async function ResolutionDetailPage({
   params,
@@ -89,7 +90,18 @@ export default async function ResolutionDetailPage({
           <CardTitle>Edit Resolution</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResolutionForm userId={session.user.id} resolution={resolution} />
+          <ResolutionForm 
+            userId={session.user.id} 
+            resolution={{
+              id: resolution.id,
+              title: resolution.title,
+              description: resolution.description,
+              category: resolution.category as Category,
+              frequencyType: resolution.frequencyType as FrequencyType,
+              targetPerPeriod: resolution.targetPerPeriod,
+              startDate: resolution.startDate.toISOString().split('T')[0],
+            }} 
+          />
         </CardContent>
       </Card>
     </div>

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Plus, CheckCircle } from "lucide-react"
 import { getDateString } from "@/lib/utils"
+import { Category, FrequencyType } from "@/lib/enums"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -123,7 +124,15 @@ export default async function DashboardPage() {
             {resolutionsWithStreaks.map(({ resolution, streakInfo, progress }) => (
               <ResolutionCard
                 key={resolution.id}
-                resolution={resolution}
+                resolution={{
+                  id: resolution.id,
+                  title: resolution.title,
+                  description: resolution.description,
+                  category: resolution.category as Category,
+                  frequencyType: resolution.frequencyType as FrequencyType,
+                  targetPerPeriod: resolution.targetPerPeriod,
+                  startDate: resolution.startDate,
+                }}
                 streakInfo={streakInfo}
                 progress={progress}
                 userId={session.user.id}

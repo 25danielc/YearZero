@@ -52,7 +52,7 @@ export async function TrophyCase({ userId }: TrophyCaseProps) {
       </h2>
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
         {badges.map((badge) => {
-          const config = badgeConfig[badge.type]
+          const config = badgeConfig[badge.type as BadgeType]
           return (
             <Card key={badge.id} className="hover:shadow-lg transition-all hover:scale-105 border-2 border-yellow-200 dark:border-yellow-800">
               <CardContent className="pt-6 pb-6 text-center">
