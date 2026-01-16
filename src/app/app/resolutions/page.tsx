@@ -9,6 +9,8 @@ import { Plus, Archive, Edit, Trash2 } from "lucide-react"
 import { deleteResolution, archiveResolution } from "@/app/actions/resolutions"
 import { ResolutionActions } from "@/components/resolution-actions"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ResolutionsPage() {
   const session = await getServerSession(authOptions)
 

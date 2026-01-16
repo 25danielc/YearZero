@@ -7,6 +7,8 @@ import { CheckInStatus } from "@/lib/enums"
 import { getWeeksInRange, getDateString } from "@/lib/utils"
 import { WeeklyCharts } from "@/components/weekly-charts"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ReviewPage() {
   const session = await getServerSession(authOptions)
 

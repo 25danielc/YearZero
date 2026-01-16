@@ -10,6 +10,8 @@ import { StreakBadge } from "@/components/streak-badge"
 import { CheckInHistory } from "@/components/checkin-history"
 import { Category, FrequencyType } from "@/lib/enums"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ResolutionDetailPage({
   params,
 }: {

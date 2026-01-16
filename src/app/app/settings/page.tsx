@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { ResetDemoButton } from "@/components/reset-demo-button"
 import { TrophyCase } from "@/components/trophy-case"
 
+export const dynamic = 'force-dynamic'
+
 export default async function SettingsPage() {
   const session = await getServerSession(authOptions)
 
