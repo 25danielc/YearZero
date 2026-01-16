@@ -175,30 +175,12 @@ Create a `.env` file (not included in repo):
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-secret-key-here
 DATABASE_URL="file:./dev.db"
-
-# Email Configuration (for daily notifications)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
-
-# Optional: Protect cron endpoint (recommended for production)
-# CRON_SECRET=your-cron-secret-here
 ```
 
 Generate a secret:
 ```bash
 openssl rand -base64 32
 ```
-
-### Email Setup
-
-For Gmail:
-1. Enable 2-factor authentication on your Google account
-2. Generate an App Password: https://myaccount.google.com/apppasswords
-3. Use the app password as `EMAIL_PASSWORD`
-
-For other email providers, update `EMAIL_HOST` and `EMAIL_PORT` accordingly.
 
 ## Deployment
 
@@ -213,33 +195,6 @@ For other email providers, update `EMAIL_HOST` and `EMAIL_PORT` accordingly.
    ```
 
 3. For production databases (PostgreSQL), update `DATABASE_URL` in `.env`
-
-4. Set up email credentials in `.env` for daily notifications
-
-## Daily Notifications
-
-The app sends daily email reminders at midnight (12:00 AM) to users with unchecked resolutions.
-
-### Production (Vercel)
-
-When deployed to Vercel, cron jobs are automatically configured via `vercel.json`:
-- Endpoint: `/api/cron/daily-notifications`
-- Schedule: Every day at midnight (UTC)
-
-### Local Development
-
-For local development, you can:
-1. Use a service like [cron-job.org](https://cron-job.org) to call your endpoint
-2. Set up a local cron job (Unix/Mac):
-   ```bash
-   # Add to crontab (crontab -e)
-   0 0 * * * curl -X GET http://localhost:3000/api/cron/daily-notifications
-   ```
-3. Manually test by calling: `GET http://localhost:3000/api/cron/daily-notifications`
-
-### Protecting the Cron Endpoint (Optional)
-
-For production, it's recommended to add authentication. Uncomment the auth check in `/app/api/cron/daily-notifications/route.ts` and set `CRON_SECRET` in your environment variables.
 
 ## License
 

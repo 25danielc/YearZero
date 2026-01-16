@@ -56,45 +56,6 @@ git push
 
 ---
 
-## 📧 Optional: Email Configuration
-
-Only set these if you want daily email notifications:
-
-### 4. **EMAIL_HOST** (Optional)
-```
-Default: smtp.gmail.com
-Example: smtp.gmail.com
-```
-
-### 5. **EMAIL_PORT** (Optional)
-```
-Default: 587
-Example: 587
-```
-
-### 6. **EMAIL_USER** (Optional)
-```
-Example: your-email@gmail.com
-```
-- Your email address for sending notifications
-
-### 7. **EMAIL_PASSWORD** (Optional)
-```
-Example: your-app-password
-```
-- **NOT your regular password!**
-- For Gmail: Generate an App Password at https://myaccount.google.com/apppasswords
-- Enable 2FA on your Google account first
-
-### 8. **CRON_SECRET** (Optional - Recommended for Production)
-```
-Generate with: openssl rand -base64 32
-```
-- Protects your cron endpoint from unauthorized access
-- If set, uncomment the auth check in `src/app/api/cron/daily-notifications/route.ts`
-
----
-
 ## 🚀 Quick Setup Steps
 
 ### Step 1: Set Required Variables in Vercel
@@ -194,16 +155,10 @@ After deployment, verify:
 
 ## 📝 Summary
 
-**Minimum Required (3 variables):**
+**Required (3 variables):**
 1. `NEXTAUTH_URL` - Your Vercel app URL
 2. `NEXTAUTH_SECRET` - Random secret (generate with openssl)
 3. `DATABASE_URL` - PostgreSQL connection string
-
-**Optional (4 variables for email):**
-4. `EMAIL_HOST` - SMTP server
-5. `EMAIL_PORT` - SMTP port
-6. `EMAIL_USER` - Your email
-7. `EMAIL_PASSWORD` - App password (not regular password)
 
 That's it! Your app should deploy successfully.
 

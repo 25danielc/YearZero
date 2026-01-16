@@ -96,17 +96,7 @@ git push -u origin main
    }
    ```
 
-5. **Optional: Email Configuration**
-   If you want daily notifications:
-   ```
-   EMAIL_HOST=smtp.gmail.com
-   EMAIL_PORT=587
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASSWORD=your-app-password
-   CRON_SECRET=your-cron-secret-here
-   ```
-
-6. **Deploy**
+5. **Deploy**
    - Click **"Deploy"**
    - Wait for build to complete (usually 2-3 minutes)
 
@@ -247,8 +237,6 @@ npx prisma studio           # Open database GUI
 
 1. ✅ Test the deployed app
 2. ✅ Create a test user account
-3. ✅ Verify email notifications (if configured)
-4. ✅ Check cron job execution
-5. ✅ Set up custom domain (optional)
-6. ✅ Configure analytics (optional)
+3. ✅ Set up custom domain (optional)
+4. ✅ Configure analytics (optional)
 
