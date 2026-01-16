@@ -22,6 +22,9 @@ import { getDateString } from "@/lib/utils"
  * 
  * To protect from unauthorized access, verify a secret header:
  */
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   // Optional: Add authentication for cron endpoint
   // const authHeader = request.headers.get("authorization")
