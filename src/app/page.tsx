@@ -31,8 +31,8 @@ export default function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
             <Card className="hover:shadow-lg transition-all hover:scale-105 border-purple-200 dark:border-purple-800">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-3">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-3 mx-auto">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>Track Resolutions</CardTitle>
@@ -43,8 +43,8 @@ export default function LandingPage() {
             </Card>
 
             <Card className="hover:shadow-lg transition-all hover:scale-105 border-orange-200 dark:border-orange-800">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-3">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center mb-3 mx-auto">
                   <TrendingUp className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>Build Streaks</CardTitle>
@@ -55,8 +55,8 @@ export default function LandingPage() {
             </Card>
 
             <Card className="hover:shadow-lg transition-all hover:scale-105 border-yellow-200 dark:border-yellow-800">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center mb-3">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-amber-500 flex items-center justify-center mb-3 mx-auto">
                   <Award className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>Earn XP & Badges</CardTitle>
@@ -67,8 +67,8 @@ export default function LandingPage() {
             </Card>
 
             <Card className="hover:shadow-lg transition-all hover:scale-105 border-blue-200 dark:border-blue-800">
-              <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-3">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-3 mx-auto">
                   <BarChart3 className="w-6 h-6 text-white" />
                 </div>
                 <CardTitle>Weekly Stats</CardTitle>
